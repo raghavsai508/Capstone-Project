@@ -41,6 +41,11 @@
         </activity>
         <activity android:name=".PhotosActivity" />
         <activity android:name=".FavoritesActivity"></activity>
+        
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".data.FavoritePhotosProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
