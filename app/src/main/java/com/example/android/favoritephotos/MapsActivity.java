@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.android.favoritephotos.data.FavoritePhotosContract;
+import com.example.android.favoritephotos.utils.NetworkUtility;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -76,6 +77,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(latLng));
+                NetworkUtility.buildFlickrUrl(1, latLng);
+
                 marker.setTag(insertedUri);
 
             }
