@@ -2,6 +2,7 @@ package com.example.android.favoritephotos;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Uri mUri;
 
     private static final int ID_PINS_LOADER = 251;
+    private static final String INTENT_MARKER_LATLNG = "intent_marker_latlng";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +90,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         Log.v("Map Point", marker.getTag().toString());
-
+        Intent intent = new Intent(this, PhotosActivity.class);
+        intent.putExtra(INTENT_MARKER_LATLNG, marker.getPosition());
+        startActivity(intent);
         return false;
     }
 

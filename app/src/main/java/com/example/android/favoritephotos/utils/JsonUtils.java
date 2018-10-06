@@ -13,6 +13,7 @@ public final class JsonUtils {
 
     public static List<FlickrPhoto> getFlickrPhotos(String flickrJSONString) throws JSONException {
         final String FLICKR_RESULTS = "photos";
+        final String FLICKR_PHOTO = "photo";
 
         final String FLICKR_ID = "id";
         final String FLICKR_OWNER = "owner";
@@ -20,9 +21,9 @@ public final class JsonUtils {
         final String FLICKR_SERVER = "server";
         final String FLICKR_FARM = "farm";
         final String FLICKR_TITLE = "title";
-        final String FLICKR_IS_PUBLIC = "isPublic";
-        final String FLICKR_IS_FRIEND = "isFriend";
-        final String FLICKR_IS_FAMILY = "isFamily";
+        final String FLICKR_IS_PUBLIC = "ispublic";
+        final String FLICKR_IS_FRIEND = "isfriend";
+        final String FLICKR_IS_FAMILY = "isfriend";
         final String FLICKR_URL_M = "url_m";
         final String FLICKR_HEIGHT_M = "height_m";
         final String FLICKR_WIDTH_M = "width_m";
@@ -31,7 +32,8 @@ public final class JsonUtils {
         ArrayList<FlickrPhoto> flickrPhotoArrayList = new ArrayList<>();
 
         JSONObject flickrJSON = new JSONObject(flickrJSONString);
-        JSONArray resultsArray = flickrJSON.getJSONArray(FLICKR_RESULTS);
+        JSONObject photosJSON = flickrJSON.getJSONObject(FLICKR_RESULTS);
+        JSONArray resultsArray = photosJSON.getJSONArray(FLICKR_PHOTO);
 
         for (int i = 0; i < resultsArray.length(); i++) {
             String id, owner, secret, server, title, url_m;
