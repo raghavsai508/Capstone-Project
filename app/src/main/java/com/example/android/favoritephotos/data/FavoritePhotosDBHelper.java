@@ -10,7 +10,7 @@ public class FavoritePhotosDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "favoritePhotosDB.db";
 
     // If you change the database schema, increment the database version
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     FavoritePhotosDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -18,17 +18,27 @@ public class FavoritePhotosDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String CREATE_TABLE = "CREATE TABLE "  + FavoritePhotosContract.PinsEntry.TABLE_NAME + " (" +
+        final String CREATE_TABLE_PINS = "CREATE TABLE "  + FavoritePhotosContract.PinsEntry.TABLE_NAME + " (" +
                 FavoritePhotosContract.PinsEntry._ID                + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 FavoritePhotosContract.PinsEntry.COLUMN_PIN_LATITUDE + " DOUBLE NOT NULL, " +
                 FavoritePhotosContract.PinsEntry.COLUMN_PIN_LONGITUDE + " DOUBLE NOT NULL);";
 
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_TABLE_PINS);
+
+        final String CREATE_TABLE_FAV_PHOTOS = "CREATE TABLE "  + FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME + " (" +
+                FavoritePhotosContract.FavoritePhotosEntry._ID                + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL + " TEXT NOT NULL, " +
+                FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL + " TEXT NOT NULL, " +
+                FavoritePhotosContract.FavoritePhotosEntry.COLUMN_CREATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP);";
+
+        db.execSQL(CREATE_TABLE_FAV_PHOTOS);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + FavoritePhotosContract.PinsEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME);
         onCreate(db);
     }
 }

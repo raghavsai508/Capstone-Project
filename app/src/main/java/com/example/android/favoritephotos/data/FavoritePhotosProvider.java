@@ -15,6 +15,9 @@ public class FavoritePhotosProvider extends ContentProvider {
 
     public static final int PINS = 100;
     public static final int PIN_WITH_ID = 101;
+    public static final int FAV_PHOTOS = 200;
+    public static final int FAV_PHOTOS_WITH_ID = 201;
+
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -23,6 +26,8 @@ public class FavoritePhotosProvider extends ContentProvider {
 
         uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_PINS, PINS);
         uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_PINS + "/#", PIN_WITH_ID);
+        uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_FAVORITE_PHOTOS, FAV_PHOTOS);
+        uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_FAVORITE_PHOTOS + "/#", FAV_PHOTOS_WITH_ID);
 
         return uriMatcher;
     }
@@ -67,6 +72,33 @@ public class FavoritePhotosProvider extends ContentProvider {
 
                 break;
             }
+            case FAV_PHOTOS : {
+                cursor = mFavoritePhotosDBHelper.getReadableDatabase().query(
+                        FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+
+                break;
+            }
+            case FAV_PHOTOS_WITH_ID : {
+                String photoID = uri.getLastPathSegment();
+                String[] selectionArguments = new String[]{photoID};
+                cursor = mFavoritePhotosDBHelper.getReadableDatabase().query(
+                        FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME,
+                        projection,
+                        FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL + " = ?",
+                        selectionArguments,
+                        null,
+                        null,
+                        sortOrder);
+
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -90,14 +122,24 @@ public class FavoritePhotosProvider extends ContentProvider {
         Uri returnUri; // URI to be returned
 
         switch (match) {
-            case PINS:
+            case PINS: {
                 long id = db.insert(FavoritePhotosContract.PinsEntry.TABLE_NAME, null, values);
-                if ( id > 0 ) {
+                if (id > 0) {
                     returnUri = ContentUris.withAppendedId(FavoritePhotosContract.PinsEntry.CONTENT_URI, id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert pin into " + uri);
                 }
                 break;
+            }
+            case FAV_PHOTOS: {
+                long id = db.insert(FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME, null, values);
+                if (id > 0) {
+                    returnUri = ContentUris.withAppendedId(FavoritePhotosContract.FavoritePhotosEntry.CONTENT_URI, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert favorite into " + uri);
+                }
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -114,10 +156,16 @@ public class FavoritePhotosProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case PIN_WITH_ID:
+            case PIN_WITH_ID: {
                 String pinID = uri.getPathSegments().get(1);
-                deletedRows = db.delete(FavoritePhotosContract.PinsEntry.TABLE_NAME, FavoritePhotosContract.PinsEntry._ID +"=?", new String[]{pinID});
+                deletedRows = db.delete(FavoritePhotosContract.PinsEntry.TABLE_NAME, FavoritePhotosContract.PinsEntry._ID + "=?", new String[]{pinID});
                 break;
+            }
+            case FAV_PHOTOS_WITH_ID: {
+                String favoritePhotoID = uri.getPathSegments().get(1);
+                deletedRows = db.delete(FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME, FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL + "=?", new String[]{favoritePhotoID});
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

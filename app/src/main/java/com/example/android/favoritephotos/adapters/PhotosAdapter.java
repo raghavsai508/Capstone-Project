@@ -36,6 +36,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         @BindView(R.id.imageView_photo)
         ImageView imageViewPhoto;
 
+        @BindView(R.id.btn_favorite)
+        ImageView imageViewFavorite;
+
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -54,6 +57,14 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                 photoItemClickListener.onPhotoClick(mFlickrPhotosList.get(viewHolder.getAdapterPosition()));
             }
         });
+
+        viewHolder.imageViewFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         return viewHolder;
     }
 
