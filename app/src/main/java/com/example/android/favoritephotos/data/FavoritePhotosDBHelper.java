@@ -10,9 +10,9 @@ public class FavoritePhotosDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "favoritePhotosDB.db";
 
     // If you change the database schema, increment the database version
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
 
-    FavoritePhotosDBHelper(Context context) {
+    public FavoritePhotosDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
 

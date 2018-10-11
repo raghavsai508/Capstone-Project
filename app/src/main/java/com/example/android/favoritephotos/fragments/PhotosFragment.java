@@ -1,7 +1,10 @@
 package com.example.android.favoritephotos.fragments;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,10 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android.favoritephotos.DetailActivity;
 import com.example.android.favoritephotos.R;
 import com.example.android.favoritephotos.adapters.PhotosAdapter;
+import com.example.android.favoritephotos.data.FavoritePhotosContract;
 import com.example.android.favoritephotos.interfaces.PhotoItemClickListener;
 import com.example.android.favoritephotos.models.FlickrPhoto;
 import com.example.android.favoritephotos.network.PhotosLoaderCallbacks;
@@ -159,6 +164,30 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra(INTENT_MARKER_FLICKR_PHOTO, photo);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onFavoriteClick(String mediaURL, boolean isFavorite) {
+                ContentResolver contentResolver = getContext().getContentResolver();
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL, mediaURL);
+                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL, mediaURL);
+                if (isFavorite) {
+                    Uri mUri = FavoritePhotosContract.FavoritePhotosEntry.CONTENT_URI
+                                .buildUpon()
+                                .appendPath(mediaURL)
+                                .build();
+                    int deletedID = contentResolver.delete(mUri, null, null);
+                    if(deletedID != 0) {
+                        Toast.makeText(getContext(), Integer.toString(deletedID), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Uri mUri = FavoritePhotosContract.FavoritePhotosEntry.CONTENT_URI;
+                    Uri insertedUri = contentResolver.insert(mUri, contentValues);
+                    if(insertedUri != null) {
+                        Toast.makeText(getContext(), insertedUri.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
         recyclerViewPhotos.setAdapter(photosAdapter);

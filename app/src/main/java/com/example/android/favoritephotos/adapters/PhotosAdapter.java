@@ -3,6 +3,7 @@ package com.example.android.favoritephotos.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,12 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         viewHolder.imageViewFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                FlickrPhoto flickrPhoto = mFlickrPhotosList.get(viewHolder.getAdapterPosition());
+                DBPhotoAdapter dbPhotoAdapter = new DBPhotoAdapter(mContext);
+                boolean isFavorite = dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m());
+                changeFavoriteImage(viewHolder, !isFavorite);
+                photoItemClickListener.onFavoriteClick(flickrPhoto.getUrl_m(), isFavorite);
+                dbPhotoAdapter.closeDB();
             }
         });
 
@@ -72,6 +78,22 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         FlickrPhoto flickrPhoto = mFlickrPhotosList.get(position);
         Picasso.get().load(flickrPhoto.getUrl_m()).into(viewHolder.imageViewPhoto);
+        DBPhotoAdapter dbPhotoAdapter = new DBPhotoAdapter(mContext);
+        Log.d("Favorite:",String.valueOf(dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m())));
+        boolean isFavorite = dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m());
+        changeFavoriteImage(viewHolder, isFavorite);
+
+        dbPhotoAdapter.closeDB();
+    }
+
+    private void changeFavoriteImage(@NonNull ViewHolder viewHolder, boolean isFavorite) {
+        int favoriteResource;
+        if (isFavorite) {
+            favoriteResource = android.R.drawable.btn_star_big_on;
+        } else {
+            favoriteResource = android.R.drawable.btn_star_big_off;
+        }
+        viewHolder.imageViewFavorite.setImageResource(favoriteResource);
     }
 
     @Override

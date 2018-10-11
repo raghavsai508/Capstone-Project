@@ -27,7 +27,7 @@ public class FavoritePhotosProvider extends ContentProvider {
         uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_PINS, PINS);
         uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_PINS + "/#", PIN_WITH_ID);
         uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_FAVORITE_PHOTOS, FAV_PHOTOS);
-        uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_FAVORITE_PHOTOS + "/#", FAV_PHOTOS_WITH_ID);
+        uriMatcher.addURI(FavoritePhotosContract.AUTHORITY, FavoritePhotosContract.PATH_FAVORITE_PHOTOS + "/*", FAV_PHOTOS_WITH_ID);
 
         return uriMatcher;
     }
