@@ -2,8 +2,10 @@ package com.example.android.favoritephotos.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,8 +47,11 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
 
     @NonNull
     @Override
-    public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-        return null;
+    public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View mView = layoutInflater.inflate(R.layout.photo_list_item, parent, false);
+        FavoritesViewHolder viewHolder = new FavoritesViewHolder(mView);
+        return viewHolder;
     }
 
     @Override
@@ -54,10 +59,11 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         mCursor.moveToPosition(position);
 
         String url_m = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_URL_M);
-//        String internal_url = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_INTERNAL_URL);
-        File internal_url = ImageUtils.getImageFileDownloaded(mContext, url_m,mContext.getString(R.string.image_directory));
-        Picasso.get().load(internal_url).into(favoritesViewHolder.imageViewPhoto);
+        Uri uri = Uri.parse(url_m);
+        String imageName = uri.getLastPathSegment();
 
+        File internal_url = ImageUtils.getImageFileDownloaded(mContext, imageName,mContext.getString(R.string.image_directory));
+        Picasso.get().load(internal_url).into(favoritesViewHolder.imageViewPhoto);
     }
 
     @Override
@@ -68,7 +74,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         return mCursor.getCount();
     }
 
-    void swapCursor(Cursor newCursor) {
+    public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }

@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.android.favoritephotos.DetailActivity;
+import com.example.android.favoritephotos.FavoritesActivity;
 import com.example.android.favoritephotos.R;
 import com.example.android.favoritephotos.adapters.PhotosAdapter;
 import com.example.android.favoritephotos.data.FavoritePhotosContract;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.PhotosLoaderListener, OnMapReadyCallback {
@@ -52,6 +55,8 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
     @BindView(R.id.recyclerView_photos)
     RecyclerView recyclerViewPhotos;
 
+    @BindView(R.id.btn_favorites)
+    Button btnFavorites;
 
     public PhotosFragment() {
         // Required empty public constructor
@@ -167,11 +172,11 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
             }
 
             @Override
-            public void onFavoriteClick(String mediaURL, boolean isFavorite) {
+            public void onFavoriteClick(String mediaURL, String internalMediaUrl, boolean isFavorite) {
                 ContentResolver contentResolver = getContext().getContentResolver();
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL, mediaURL);
-                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL, mediaURL);
+                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL, internalMediaUrl);
                 if (isFavorite) {
                     Uri mUri = FavoritePhotosContract.FavoritePhotosEntry.CONTENT_URI
                                 .buildUpon()
@@ -191,6 +196,12 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
             }
         });
         recyclerViewPhotos.setAdapter(photosAdapter);
+    }
+
+    @OnClick(R.id.btn_favorites)
+    void btnFavoritesClick(View view) {
+        Intent intent = new Intent(getContext(), FavoritesActivity.class);
+        startActivity(intent);
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.android.favoritephotos.adapters;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,8 +14,10 @@ import android.widget.ImageView;
 import com.example.android.favoritephotos.R;
 import com.example.android.favoritephotos.interfaces.PhotoItemClickListener;
 import com.example.android.favoritephotos.models.FlickrPhoto;
+import com.example.android.favoritephotos.utils.ImageUtils;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,7 +70,21 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                 DBPhotoAdapter dbPhotoAdapter = new DBPhotoAdapter(mContext);
                 boolean isFavorite = dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m());
                 changeFavoriteImage(viewHolder, !isFavorite);
-                photoItemClickListener.onFavoriteClick(flickrPhoto.getUrl_m(), isFavorite);
+                String imageFile= "";
+                if (!isFavorite) {
+                    Uri uri = Uri.parse(flickrPhoto.getUrl_m());
+                    String imageName = uri.getLastPathSegment();
+                    ContextWrapper contextWrapper = new ContextWrapper(mContext);
+                    File directory = contextWrapper.getDir(mContext.getString(R.string.image_directory), Context.MODE_PRIVATE);
+                    imageFile = new File(directory, imageName).getAbsolutePath();
+
+                    Picasso.get().load(flickrPhoto.getUrl_m()).into(ImageUtils.storePicassoImageTarget(mContext, mContext.getString(R.string.image_directory), imageName));
+                } else {
+                    ImageUtils.deleteFileDownloaded(mContext, flickrPhoto.getUrl_m(), mContext.getString(R.string.image_directory));
+                }
+
+
+                photoItemClickListener.onFavoriteClick(flickrPhoto.getUrl_m(), imageFile, isFavorite);
                 dbPhotoAdapter.closeDB();
             }
         });
