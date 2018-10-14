@@ -8,5 +8,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="image_directory">favorites_directory</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <!-- Widget -->
+    <string name="empty_view_text">Please select your favorite photos by dropping pins on the map.</string>
 
 </resources>

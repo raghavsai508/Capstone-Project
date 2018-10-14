@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.android.favoritephotos.adapters.FavoritesAdapter;
 import com.example.android.favoritephotos.data.FavoritePhotosContract;
+import com.example.android.favoritephotos.widget.FavoritePhotosWidgetProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +55,7 @@ public class FavoritesActivity extends AppCompatActivity implements
         recyclerViewFavorites.setAdapter(mFavoritesAdapter);
         getSupportLoaderManager().initLoader(ID_FAVORITES_LOADER, null, this);
 
+//        setupAppWidget();
     }
 
     @NonNull
@@ -84,7 +86,8 @@ public class FavoritesActivity extends AppCompatActivity implements
             mPosition = 0;
         }
         recyclerViewFavorites.smoothScrollToPosition(mPosition);
-//        if (cursor.getCount() != 0) showWeatherDataView();
+        setupAppWidget();
+
 
     }
 
@@ -92,4 +95,25 @@ public class FavoritesActivity extends AppCompatActivity implements
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mFavoritesAdapter.swapCursor(null);
     }
+
+    private void setupAppWidget() {
+
+//        SharedPreferences.Editor sharedPreferencesEdit = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE).edit();
+
+
+
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+//        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, FavoritePhotosWidgetProvider.class));
+//        FavoritePhotosWidgetProvider.updateFavoriteWidget(this, appWidgetManager, appWidgetIds);
+//        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
+        FavoritePhotosWidgetProvider.sendRefreshBroadcast(FavoritesActivity.this);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//            }
+//        }).start();
+
+    }
+
 }

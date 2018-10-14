@@ -18,6 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -45,9 +47,23 @@
         <provider
             android:name=".data.FavoritePhotosProvider"
             android:authorities="@string/content_authority"
-            android:exported="false" />
+            android:exported="true" />
 
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".DetailActivity" />
+
+        <receiver android:name=".widget.FavoritePhotosWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/favorite_photos_widget_info" />
+        </receiver>
+
+        <service android:name=".widget.FavoritesGridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>
