@@ -9,8 +9,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.example.android.favoritephotos.adapters.FavoritesAdapter;
 import com.example.android.favoritephotos.data.FavoritePhotosContract;
@@ -26,11 +26,16 @@ public class FavoritesActivity extends AppCompatActivity implements
     public static final int INDEX_FAVORITE_CREATED_DATE = 0;
     public static final int INDEX_FAVORITE_URL_M = 1;
     public static final int INDEX_FAVORITE_INTERNAL_URL = 2;
+    public static final int INDEX_FAVORITE_MEDIA_WIDTH = 3;
+    public static final int INDEX_FAVORITE_MEDIA_HEIGHT = 4;
+
 
     public static final String[] FAVORITES_PROJECTION = {
             FavoritePhotosContract.FavoritePhotosEntry.COLUMN_CREATED_AT,
             FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL,
-            FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL
+            FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL,
+            FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_WIDTH,
+            FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_HEIGHT
     };
 
     private static final int ID_FAVORITES_LOADER = 44;
@@ -48,14 +53,13 @@ public class FavoritesActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
 
         recyclerViewFavorites.setHasFixedSize(true);
-        GridLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
-        recyclerViewFavorites.setLayoutManager(linearLayoutManager);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewFavorites.setLayoutManager(staggeredGridLayoutManager);
 
         mFavoritesAdapter = new FavoritesAdapter(this);
         recyclerViewFavorites.setAdapter(mFavoritesAdapter);
         getSupportLoaderManager().initLoader(ID_FAVORITES_LOADER, null, this);
 
-//        setupAppWidget();
     }
 
     @NonNull
@@ -97,23 +101,7 @@ public class FavoritesActivity extends AppCompatActivity implements
     }
 
     private void setupAppWidget() {
-
-//        SharedPreferences.Editor sharedPreferencesEdit = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE).edit();
-
-
-
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-//        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, FavoritePhotosWidgetProvider.class));
-//        FavoritePhotosWidgetProvider.updateFavoriteWidget(this, appWidgetManager, appWidgetIds);
-//        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
         FavoritePhotosWidgetProvider.sendRefreshBroadcast(FavoritesActivity.this);
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//            }
-//        }).start();
-
     }
 
 }

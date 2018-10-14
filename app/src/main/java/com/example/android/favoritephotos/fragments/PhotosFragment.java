@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,8 +81,8 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
         mapView.getMapAsync(this);
 
         recyclerViewPhotos.setHasFixedSize(true);
-        GridLayoutManager linearLayoutManager = new GridLayoutManager(context, 2);
-        recyclerViewPhotos.setLayoutManager(linearLayoutManager);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewPhotos.setLayoutManager(staggeredGridLayoutManager);
 
         getPhotos();
 
@@ -172,15 +172,17 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
             }
 
             @Override
-            public void onFavoriteClick(String mediaURL, String internalMediaUrl, boolean isFavorite) {
+            public void onFavoriteClick(FlickrPhoto flickrPhoto, String internalMediaUrl, boolean isFavorite) {
                 ContentResolver contentResolver = getContext().getContentResolver();
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL, mediaURL);
+                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL, flickrPhoto.getUrl_m());
                 contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL, internalMediaUrl);
+                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_WIDTH, flickrPhoto.getWidth_m());
+                contentValues.put(FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_HEIGHT, flickrPhoto.getHeight_m());
                 if (isFavorite) {
                     Uri mUri = FavoritePhotosContract.FavoritePhotosEntry.CONTENT_URI
                                 .buildUpon()
-                                .appendPath(mediaURL)
+                                .appendPath(flickrPhoto.getUrl_m())
                                 .build();
                     int deletedID = contentResolver.delete(mUri, null, null);
                     if(deletedID != 0) {

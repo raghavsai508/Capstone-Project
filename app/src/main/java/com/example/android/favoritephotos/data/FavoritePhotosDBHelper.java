@@ -10,7 +10,7 @@ public class FavoritePhotosDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "favoritePhotosDB.db";
 
     // If you change the database schema, increment the database version
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
 
     public FavoritePhotosDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -29,6 +29,8 @@ public class FavoritePhotosDBHelper extends SQLiteOpenHelper {
                 FavoritePhotosContract.FavoritePhotosEntry._ID                + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL + " TEXT NOT NULL, " +
                 FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL_INTERNAL + " TEXT NOT NULL, " +
+                FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_WIDTH + " INTEGER NOT NULL, " +
+                FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_HEIGHT + " INTEGER NOT NULL, " +
                 FavoritePhotosContract.FavoritePhotosEntry.COLUMN_CREATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP);";
 
         db.execSQL(CREATE_TABLE_FAV_PHOTOS);

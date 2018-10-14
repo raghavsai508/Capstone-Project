@@ -59,6 +59,11 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         mCursor.moveToPosition(position);
 
         String url_m = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_URL_M);
+        int width = mCursor.getInt(FavoritesActivity.INDEX_FAVORITE_MEDIA_WIDTH);
+        int height = mCursor.getInt(FavoritesActivity.INDEX_FAVORITE_MEDIA_HEIGHT);
+        favoritesViewHolder.imageViewPhoto.getLayoutParams().width = width;
+        favoritesViewHolder.imageViewPhoto.getLayoutParams().height = height;
+
         Uri uri = Uri.parse(url_m);
         String imageName = uri.getLastPathSegment();
 

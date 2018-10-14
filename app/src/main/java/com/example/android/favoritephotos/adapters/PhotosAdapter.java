@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +43,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
         @BindView(R.id.btn_favorite)
         ImageView imageViewFavorite;
+
+        @BindView(R.id.card_view)
+        CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
@@ -84,7 +87,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                 }
 
 
-                photoItemClickListener.onFavoriteClick(flickrPhoto.getUrl_m(), imageFile, isFavorite);
+                photoItemClickListener.onFavoriteClick(flickrPhoto, imageFile, isFavorite);
                 dbPhotoAdapter.closeDB();
             }
         });
@@ -95,12 +98,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         FlickrPhoto flickrPhoto = mFlickrPhotosList.get(position);
+        viewHolder.imageViewPhoto.getLayoutParams().width = flickrPhoto.getWidth_m();
+        viewHolder.imageViewPhoto.getLayoutParams().height = flickrPhoto.getHeight_m();
         Picasso.get().load(flickrPhoto.getUrl_m()).into(viewHolder.imageViewPhoto);
         DBPhotoAdapter dbPhotoAdapter = new DBPhotoAdapter(mContext);
-        Log.d("Favorite:",String.valueOf(dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m())));
+//        Log.d("Favorite:",String.valueOf(dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m())));
         boolean isFavorite = dbPhotoAdapter.isFavorite(flickrPhoto.getUrl_m());
         changeFavoriteImage(viewHolder, isFavorite);
-
         dbPhotoAdapter.closeDB();
     }
 
