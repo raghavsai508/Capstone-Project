@@ -26,10 +26,12 @@ import com.example.android.favoritephotos.models.FlickrPhoto;
 import com.example.android.favoritephotos.network.PhotosLoaderCallbacks;
 import com.example.android.favoritephotos.utils.JsonUtils;
 import com.example.android.favoritephotos.utils.NetworkUtility;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.net.URL;
 import java.util.List;
@@ -92,6 +94,10 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.addMarker(new MarkerOptions()
+                .position(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
     }
 
 
@@ -167,7 +173,7 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
             @Override
             public void onPhotoClick(FlickrPhoto photo) {
                 Intent intent = new Intent(getContext(), DetailActivity.class);
-                intent.putExtra(INTENT_MARKER_FLICKR_PHOTO, photo);
+                intent.putExtra(INTENT_MARKER_FLICKR_PHOTO, photo.getUrl_m());
                 startActivity(intent);
             }
 

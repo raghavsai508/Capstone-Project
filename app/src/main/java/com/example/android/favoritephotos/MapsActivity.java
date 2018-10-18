@@ -8,11 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.favoritephotos.data.FavoritePhotosContract;
@@ -24,13 +27,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private GoogleMap mMap;
     private Uri mUri;
 
     private static final int ID_PINS_LOADER = 251;
     private static final String INTENT_MARKER_LATLNG = "intent_marker_latlng";
+
+    private boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +96,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.v("Map Point", marker.getTag().toString());
-        Intent intent = new Intent(this, PhotosActivity.class);
-        intent.putExtra(INTENT_MARKER_LATLNG, marker.getPosition());
-        startActivity(intent);
+        Log.d("MAP URI",mUri.toString());
+        if (isEdit) {
+            Uri uri = Uri.parse(marker.getTag().toString());
+            int deletedID = getContentResolver().delete(uri, null, null);
+            if(deletedID != 0) {
+                Toast.makeText(this, Integer.toString(deletedID), Toast.LENGTH_LONG).show();
+                marker.remove();
+            }
+
+        } else {
+            Intent intent = new Intent(this, PhotosActivity.class);
+            intent.putExtra(INTENT_MARKER_LATLNG, marker.getPosition());
+            startActivity(intent);
+        }
+
         return false;
     }
 
@@ -161,5 +178,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.favorites_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit: {
+                if (isEdit) {
+                    item.setTitle(R.string.edit);
+                } else {
+                    item.setTitle(R.string.done);
+                }
+                isEdit = !isEdit;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

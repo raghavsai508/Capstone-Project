@@ -150,7 +150,7 @@ public class FavoritePhotosProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int delete(@NonNull Uri uri, @Nullable String whereClause, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = mFavoritePhotosDBHelper.getWritableDatabase();
         int deletedRows;
 
@@ -164,6 +164,10 @@ public class FavoritePhotosProvider extends ContentProvider {
             case FAV_PHOTOS_WITH_ID: {
                 String favoritePhotoID = uri.getPathSegments().get(1);
                 deletedRows = db.delete(FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME, FavoritePhotosContract.FavoritePhotosEntry.COLUMN_MEDIA_URL + "=?", new String[]{favoritePhotoID});
+                break;
+            }
+            case FAV_PHOTOS : {
+                deletedRows = db.delete(FavoritePhotosContract.FavoritePhotosEntry.TABLE_NAME, whereClause, selectionArgs);
                 break;
             }
             default:
