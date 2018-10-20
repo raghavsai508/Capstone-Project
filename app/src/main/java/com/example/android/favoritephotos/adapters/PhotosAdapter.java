@@ -29,9 +29,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     private List<FlickrPhoto> mFlickrPhotosList;
     private PhotoItemClickListener photoItemClickListener;
 
-    public PhotosAdapter(Context context, List<FlickrPhoto> photos, PhotoItemClickListener photoClickListener) {
+    public PhotosAdapter(Context context, PhotoItemClickListener photoClickListener) {
         mContext = context;
-        mFlickrPhotosList = photos;
         photoItemClickListener = photoClickListener;
     }
 
@@ -111,9 +110,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     private void changeFavoriteImage(@NonNull ViewHolder viewHolder, boolean isFavorite) {
         int favoriteResource;
         if (isFavorite) {
-            favoriteResource = android.R.drawable.btn_star_big_on;
+            favoriteResource = R.drawable.ic_favorite;
         } else {
-            favoriteResource = android.R.drawable.btn_star_big_off;
+            favoriteResource = R.drawable.ic_unfavorite;
         }
         viewHolder.imageViewFavorite.setImageResource(favoriteResource);
     }
@@ -121,6 +120,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mFlickrPhotosList.size();
+    }
+
+    public void swapData(List<FlickrPhoto> photos) {
+        mFlickrPhotosList = photos;
+        notifyDataSetChanged();
     }
 
 }

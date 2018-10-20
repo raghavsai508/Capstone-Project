@@ -36,8 +36,6 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
     private boolean multiSelect = false;
     private ArrayList<String> selectedUrls = new ArrayList<>();
 
-
-
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -137,23 +135,14 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
 
     @NonNull
     @Override
-    public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
+    public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View mView = layoutInflater.inflate(R.layout.photo_list_item, parent, false);
         final FavoritesViewHolder viewHolder = new FavoritesViewHolder(mView);
-        mCursor.moveToPosition(position);
+//        int position = viewHolder.getAdapterPosition();
+//        mCursor.moveToPosition(position);
 
-        viewHolder.imageViewPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url_m = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_URL_M);
-                Uri uri = Uri.parse(url_m);
-                String imageName = uri.getLastPathSegment();
 
-                File internal_url = ImageUtils.getImageFileDownloaded(mContext, imageName,mContext.getString(R.string.image_directory));
-                favoritePhotoDeleteListener.onPhotoClick(internal_url.getAbsolutePath());
-            }
-        });
         return viewHolder;
     }
 
@@ -161,7 +150,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
     public void onBindViewHolder(@NonNull FavoritesViewHolder favoritesViewHolder, int position) {
         mCursor.moveToPosition(position);
 
-        String url_m = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_URL_M);
+        final String url_m = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_URL_M);
+        final String internal_url = mCursor.getString(FavoritesActivity.INDEX_FAVORITE_INTERNAL_URL);
         int width = mCursor.getInt(FavoritesActivity.INDEX_FAVORITE_MEDIA_WIDTH);
         int height = mCursor.getInt(FavoritesActivity.INDEX_FAVORITE_MEDIA_HEIGHT);
         favoritesViewHolder.imageViewPhoto.getLayoutParams().width = width;
@@ -170,8 +160,15 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         Uri uri = Uri.parse(url_m);
         String imageName = uri.getLastPathSegment();
 
-        File internal_url = ImageUtils.getImageFileDownloaded(mContext, imageName,mContext.getString(R.string.image_directory));
-        Picasso.get().load(internal_url).into(favoritesViewHolder.imageViewPhoto);
+        favoritesViewHolder.imageViewPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favoritePhotoDeleteListener.onPhotoClick(internal_url, url_m);
+            }
+        });
+
+        File internal_url_file = ImageUtils.getImageFileDownloaded(mContext, imageName,mContext.getString(R.string.image_directory));
+        Picasso.get().load(internal_url_file).into(favoritesViewHolder.imageViewPhoto);
         favoritesViewHolder.update(url_m);
     }
 

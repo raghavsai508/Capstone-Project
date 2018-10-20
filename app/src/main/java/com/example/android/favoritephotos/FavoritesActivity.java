@@ -29,9 +29,9 @@ public class FavoritesActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>, FavoritePhotoDeleteListener {
 
     private static final String INTENT_MARKER_FLICKR_PHOTO = "intent_marker_flickr_photo";
+    private static final String INTENT_MARKER_FLICKR_URL = "flickr_url";
     private static final String IS_INTERNAL = "isInternal";
 
-    public static final int INDEX_FAVORITE_CREATED_DATE = 0;
     public static final int INDEX_FAVORITE_URL_M = 1;
     public static final int INDEX_FAVORITE_INTERNAL_URL = 2;
     public static final int INDEX_FAVORITE_MEDIA_WIDTH = 3;
@@ -66,7 +66,7 @@ public class FavoritesActivity extends AppCompatActivity implements
 
         mFavoritesAdapter = new FavoritesAdapter(this, this);
         recyclerViewFavorites.setAdapter(mFavoritesAdapter);
-        getSupportLoaderManager().initLoader(ID_FAVORITES_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_FAVORITES_LOADER, null, this).forceLoad();
 
     }
 
@@ -125,9 +125,10 @@ public class FavoritesActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onPhotoClick(String photoUrl) {
+    public void onPhotoClick(String photoUrl, String flickrUrl) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(INTENT_MARKER_FLICKR_PHOTO, photoUrl);
+        intent.putExtra(INTENT_MARKER_FLICKR_URL, flickrUrl);
         intent.putExtra(IS_INTERNAL, true);
         startActivity(intent);
     }

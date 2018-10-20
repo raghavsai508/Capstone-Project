@@ -63,10 +63,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-
         mMap.setOnMarkerClickListener(this);
-        getSupportLoaderManager().initLoader(ID_PINS_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_PINS_LOADER, null, this).forceLoad();
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -197,6 +195,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     item.setTitle(R.string.done);
                 }
                 isEdit = !isEdit;
+                break;
+            }
+            case R.id.favorites: {
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                startActivity(intent);
+                break;
             }
         }
 

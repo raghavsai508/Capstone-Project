@@ -33,22 +33,26 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity">
+            android:name=".MapsActivity"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PhotosActivity" />
-        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".PhotosActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".FavoritesActivity"
+            android:launchMode="singleTop"/>
 
         <provider
             android:name=".data.FavoritePhotosProvider"
             android:authorities="@string/content_authority"
             android:exported="true" />
 
-        <activity android:name=".DetailActivity" />
+        <activity android:name=".DetailActivity"
+            android:launchMode="singleTop"/>
 
         <receiver android:name=".widget.FavoritePhotosWidgetProvider">
             <intent-filter>
@@ -62,6 +66,17 @@
 
         <service android:name=".widget.FavoritesGridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        
+        <provider
+            android:authorities="@string/content_authority"
+            android:name="android.support.v4.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+
+        </provider>
 
     </application>
 

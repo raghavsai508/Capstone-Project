@@ -31,9 +31,9 @@
 
         <ImageView
             android:id="@+id/btn_favorite"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@android:drawable/btn_star_big_off"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_unfavorite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
