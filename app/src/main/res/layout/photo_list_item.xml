@@ -27,7 +27,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/common_google_signin_btn_icon_disabled" />
+            card_view:srcCompat="@drawable/common_google_signin_btn_icon_disabled"
+            android:contentDescription="@string/no_content_description" />
 
         <ImageView
             android:id="@+id/btn_favorite"
@@ -35,7 +36,8 @@
             android:layout_height="30dp"
             android:background="@drawable/ic_unfavorite"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/favorite" />
 
         <View
             android:id="@+id/selectView"

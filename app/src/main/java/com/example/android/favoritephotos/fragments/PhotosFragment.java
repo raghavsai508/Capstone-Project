@@ -60,11 +60,6 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
     @BindView(R.id.recyclerView_photos)
     RecyclerView recyclerViewPhotos;
 
-    public PhotosFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,18 +99,6 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
                 .position(latLng));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.getUiSettings().setScrollGesturesEnabled(false);
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
 
