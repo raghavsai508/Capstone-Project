@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -32,6 +34,9 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.btnShare)
     FloatingActionButton btnShare;
 
+    @BindView(R.id.adView)
+    PublisherAdView mPublisherAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,50 +55,18 @@ public class DetailActivity extends AppCompatActivity {
                 Picasso.get().load(photoUrl).into(imageViewPhoto);
             }
         }
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
+
     }
 
     @OnClick(R.id.btnShare)
     void btnShareAction(View view) {
         Intent myShareIntent;
-//        if (isInternal) {
-//            myShareIntent = new Intent(Intent.ACTION_VIEW);
-//            myShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            myShareIntent.setDataAndType(Uri.parse(flickrPhotoUrl), "image/png");
-//            PackageManager packageManager = getPackageManager();
-//            if (myShareIntent.resolveActivity(packageManager) != null) {
-//                startActivity(myShareIntent);
-//            }
-//        } else {
-            myShareIntent = new Intent(Intent.ACTION_SEND);
-            myShareIntent.setType("image/*");
-//            myShareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            myShareIntent.putExtra(Intent.EXTRA_STREAM,Uri.parse(flickrPhotoUrl));
-//            myShareIntent.setDataAndType(Uri.parse(flickrPhotoUrl), "image/*");
-            startActivity(Intent.createChooser(myShareIntent, "Share Image"));
-//            /data/user/0/com.example.android.favoritephotos/app_favorites_directory/43600873140_d8e75ce30b.jpg
-//        }
-
-//        myShareIntent = new Intent(Intent.ACTION_SEND);
-//        myShareIntent.addFlags(
-//                Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//
-//        Uri fileUri;
-//        File requestFile = new File(flickrPhotoUrl);
-//        try {
-//            fileUri = FileProvider.getUriForFile(
-//                    DetailActivity.this,
-//                    getString(R.string.content_authority),
-//                    requestFile);
-//            myShareIntent.setDataAndType(fileUri, "image/*");
-//            startActivity(Intent.createChooser(myShareIntent, "Share Image"));
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//            Log.e("File Selector",
-//                    "The selected file can't be shared: " + requestFile.toString());
-//        }
-
-
-
+        myShareIntent = new Intent(Intent.ACTION_SEND);
+        myShareIntent.setType("image/*");
+        myShareIntent.putExtra(Intent.EXTRA_STREAM,Uri.parse(flickrPhotoUrl));
+        startActivity(Intent.createChooser(myShareIntent, "Share Image"));
     }
 
 }

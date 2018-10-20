@@ -3,6 +3,8 @@
 
     <string name="content_authority">com.example.android.favoritephotos</string>
 
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544~3347511713</string>
+
     <!-- Favorites Menu -->
     <string name="edit">Edit</string>
     <string name="done">Done</string>

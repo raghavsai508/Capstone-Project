@@ -92,18 +92,6 @@ public class PhotosFragment extends Fragment implements PhotosLoaderCallbacks.Ph
             pageNumber = savedInstanceState.getInt(PAGE_NUMBER, 1);
         }
 
-//        int orientation = getResources().getConfiguration().orientation;
-//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            mapView.getLayoutParams().height = 0;
-////            mapView.setVisibility(View.INVISIBLE);
-//        } else {
-//            final float scale = getContext().getResources().getDisplayMetrics().density;
-//            int pixels = (int) (180 * scale + 0.5f);
-//
-//            mapView.getLayoutParams().height = pixels;
-////            mapView.setVisibility(View.VISIBLE);
-//        }
-
         getPhotos();
 
         return rootView;
